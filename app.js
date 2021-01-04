@@ -102,15 +102,17 @@ function generateStartingPageView() {
             </form>
         </div>
       </div>
-    </section>`;
+    </section>
+  `;
 }
 
 // QUIZ FORM
 
 function generateQuizAnswerElement(answer, answerIndex, template) { // this function may be deleted
   return `
-  <input id="answer${answerIndex}" type="radio" name="answer" value="${answer}" required>
-  <label for="answer${answerIndex}">${answer}</label><br>`;
+    <input id="answer${answerIndex}" type="radio" name="answer" value="${answer}" required>
+    <label for="answer${answerIndex}">${answer}</label><br>
+  `;
 }
 
 function generateQuizPageString() {
@@ -129,7 +131,8 @@ function generateQuizPageString() {
           <button type="submit" value="submitAnswer">Submit</button>
         </div>
       </form>
-    </div>`; 
+    </div>
+  `; 
 }
 
 // SCORE HEADER
@@ -141,7 +144,6 @@ function generateScoreView() {
       <h3>Current Score ${currentScore}:5</h3>
     </div>
   `;
-
 }
 
 // Question number HEADER
@@ -165,10 +167,10 @@ function generateStatusViewString() {
         ${questionView}
         ${scoreView}
       </div>
-    </div>`;
-
+    </div>
+  `;
 }
-// question feedback
+
 // FEEDBACK PAGE 
 function feedbackCorrectAnswerPageString() {
   const correctAnswer = store.questions[store.questionNumber].correctAnswer;
@@ -180,8 +182,7 @@ function feedbackCorrectAnswerPageString() {
         <p>${correctTextDisplay}</p>
         <div class="correct">
           <h6>Plus one point!</h6>
-        </div>
-        
+        </div> 
     `;
   }
   else {
@@ -219,7 +220,6 @@ function feedbackIncorrectAnswerPageString(answerSubmitted) {
         </div>
     `;
   }
-
 }
 function generateFeedbackString(answerSubmitted) {
   // this function will be responsible for generating the feedback page based on correct 
@@ -227,7 +227,7 @@ function generateFeedbackString(answerSubmitted) {
   let stringOutput = '';
   const answer = store.questions[store.questionNumber].correct;
   if(answer === true) {
-     stringOutput = feedbackCorrectAnswerPageString();
+    stringOutput = feedbackCorrectAnswerPageString();
   }
   else if(answer === false) {
     stringOutput = feedbackIncorrectAnswerPageString(answerSubmitted);
@@ -241,14 +241,14 @@ function generateFeedbackPageView() {
   const answerSubmitted = $('input[name="answer"]:checked').val();
   const feedbackView = generateFeedbackString(answerSubmitted);
   return `
-  <div class="align feedbackText">
-  ${feedbackView}
-  <div>
-      <form id="next">
+    <div class="align feedbackText">
+      ${feedbackView}
+      <div>
+        <form id="next">
           <button type="submit" value="nextQuestion">Next Question</button>
-      </form>
-  </div>
-</div>`;
+        </form>
+      </div>
+    </div>`;
 }
 
 function generateResultsButton() {
@@ -256,7 +256,8 @@ function generateResultsButton() {
   return `
     <form id="results">
       <button type="submit" value="seeResults">See Results</button>
-    </form>`;
+    </form>
+  `;
 }
 
 function generateFinalPageView() {
@@ -307,23 +308,14 @@ function renderPage() {
                 $('.align.feedbackText').append(generateResultsButton());
                 store.submittedAnswer = false;
               }
-              /*if(store.finishQuiz === true) {
-                $('div.topDisplay').hide();
-                app.html(finalPage);
-              }
-              */
-          }
-          
+          } 
       }
       switch(store.finishQuiz) {
         case true:
           $('div.topDisplay').hide();
           app.html(finalPage);
       }
-       
-   
   }
-  
 }
 /********** EVENT HANDLER FUNCTIONS **********/
 
@@ -364,7 +356,6 @@ function handleAnswerSubmit() {
     const answer = store.questions[store.questionNumber];
     changeCorrectState(answer);
     renderPage();
-    
   });
 }
 
@@ -385,10 +376,6 @@ function handleSeeResultsClicked() {
     renderPage();
   });
 }
-
-
-
-
 /********** CALLBACKS **********/
 function handleQuiz() {
   generateStartingPageView();
@@ -401,9 +388,3 @@ function handleQuiz() {
   generateFinalPageView();
 }
 $(handleQuiz);
-
-
-
-
-
-
