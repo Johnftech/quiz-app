@@ -66,6 +66,7 @@ const store = {
   score: 0,
   gotRight: 0,
   submittedAnswer: false,
+  finishQuiz: false
 };
 /*
  * 
@@ -172,7 +173,6 @@ function generateStatusViewString() {
 function feedbackCorrectAnswerPageString() {
   const correctAnswer = store.questions[store.questionNumber].correctAnswer;
   const correctTextDisplay = store.questions[store.questionNumber].correctAnswerDisplay;
-  console.log('*** INSIDE correct answer generator string function : Round 6: state of correct', store.questions[store.questionNumber].correct);
   if(correctTextDisplay) {
     return `
         <h3>Looks like you got that question right!</h3>
@@ -198,7 +198,6 @@ function feedbackCorrectAnswerPageString() {
 function feedbackIncorrectAnswerPageString(answerSubmitted) {
   const correctAnswer = store.questions[store.questionNumber].correctAnswer;
   const correctTextDisplay = store.questions[store.questionNumber].correctAnswerDisplay;
-  console.log('*** INSIDE IN-CORRECT answer generator string function : Round 7: state of correct', store.questions[store.questionNumber].correct);
   if(correctTextDisplay) {
     return `
         <h3>Looks like you got that question wrong!</h3>
@@ -252,8 +251,16 @@ function generateFeedbackPageView() {
 </div>`;
 }
 
+function generateResultsButton() {
+  // this function will generate the results button
+  return `
+    <form id="results">
+      <button type="submit" value="seeResults">See Results</button>
+    </form>`;
+}
+
 function generateFinalPageView() {
-  // this function will be resonsible for rendering the final page
+  // this function will be responsible for rendering the final page
   const score = store.score;
   const gotRight = store.gotRight;
   const questions = store.questions.length;
@@ -295,15 +302,28 @@ function renderPage() {
               app.html(feedbackPage);
               store.submittedAnswer = false;
               if(store.questionNumber === 4) {
+                app.html(feedbackPage);
+                $('#next').hide();
+                $('.align.feedbackText').append(generateResultsButton());
+                store.submittedAnswer = false;
+              }
+              /*if(store.finishQuiz === true) {
                 $('div.topDisplay').hide();
                 app.html(finalPage);
               }
+              */
           }
           
-    
-    }
+      }
+      switch(store.finishQuiz) {
+        case true:
+          $('div.topDisplay').hide();
+          app.html(finalPage);
+      }
+       
    
   }
+  
 }
 /********** EVENT HANDLER FUNCTIONS **********/
 
@@ -356,6 +376,19 @@ function handleNextQuestionClicked() {
     renderPage();
   });
 }
+
+function handleSeeResultsClicked() {
+  // this this function will be responsible for when user clicks on the next question
+  $('.js-page').on('submit', '#results', event => {
+    event.preventDefault();
+    store.finishQuiz = true;
+    renderPage();
+  });
+}
+
+
+
+
 /********** CALLBACKS **********/
 function handleQuiz() {
   generateStartingPageView();
@@ -364,6 +397,7 @@ function handleQuiz() {
   handleAnswerSubmit();
   generateFeedbackPageView();
   handleNextQuestionClicked();
+  handleSeeResultsClicked();
   generateFinalPageView();
 }
 $(handleQuiz);
